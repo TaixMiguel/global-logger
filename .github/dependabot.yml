@@ -11,7 +11,7 @@ updates:
       timezone: "UTC"
       time: "03:00"
     groups:
-      gradle-deps:
+      maven-deps:
         patterns:
           - "*"
 
