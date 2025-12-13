@@ -16,4 +16,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with maven and check test
-        run: mvn -B package --file SpringBackups/pom.xml
+        run: mvn -B package
