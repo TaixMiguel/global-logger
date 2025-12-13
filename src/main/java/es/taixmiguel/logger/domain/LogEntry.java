@@ -10,8 +10,7 @@ public class LogEntry extends PanacheMongoEntity {
     public String message;
     public String application;
 
-    public LogEntry() {
-    }
+    public LogEntry() {}
 
     public LogEntry(LogLevel level, String message, String application) {
         this(Instant.now(), level, message, application);

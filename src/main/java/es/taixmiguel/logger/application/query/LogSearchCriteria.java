@@ -1,16 +1,27 @@
 package es.taixmiguel.logger.application.query;
 
 import es.taixmiguel.logger.domain.LogLevel;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 
 import java.time.Instant;
 import java.util.Optional;
 
 public class LogSearchCriteria {
-    private final String application;
+    @PathParam("application")
+    private String application;
+    @QueryParam("level")
     private LogLevel level;
+    @QueryParam("dateFrom")
     private Instant dateFrom;
+    @QueryParam("dateTo")
     private Instant dateTo;
+    @QueryParam("sortOrder")
     private LogSearchSortCriteria sortOrder;
+
+    public LogSearchCriteria() {
+        this("unknow");
+    }
 
     public LogSearchCriteria(String application) {
         this.application = application;
