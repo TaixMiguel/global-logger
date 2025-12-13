@@ -20,7 +20,7 @@ public class LogSearchCriteria {
     private LogSearchSortCriteria sortOrder;
 
     public LogSearchCriteria() {
-        this("unknow");
+        this("unknown");
     }
 
     public LogSearchCriteria(String application) {

@@ -18,22 +18,7 @@ public class LogService {
     }
 
     public void recordLog(LogEntry entry) {
-        validateLog(entry);
         repository.save(entry);
-    }
-
-    private void validateLog(LogEntry entry) {
-        if (entry.application == null || entry.application.isBlank())
-            throw new IllegalArgumentException("Log entry validation failed: 'application' cannot be null or blank.");
-
-        if (entry.timestamp == null)
-            throw new IllegalArgumentException("Log entry validation failed: 'timestamp' cannot be null.");
-
-        if (entry.level == null)
-            throw new IllegalArgumentException("Log entry validation failed: 'level' cannot be null.");
-
-        if (entry.message == null || entry.message.isBlank())
-            throw new IllegalArgumentException("Log entry validation failed: 'message' cannot be null or blank.");
     }
 
     public List<LogEntry> findLogs(LogSearchCriteria criteria) {
