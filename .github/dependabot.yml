@@ -1,0 +1,32 @@
+version: 2
+updates:
+  # Maintain dependencies for Maven
+  - package-ecosystem: "maven"
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      timezone: "UTC"
+      time: "03:00"
+    groups:
+      gradle-deps:
+        patterns:
+          - "*"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
+    directory: "/.github"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      timezone: "UTC"
+      time: "03:00"
+    groups:
+      ghactions:
+        patterns:
+          - "*"
