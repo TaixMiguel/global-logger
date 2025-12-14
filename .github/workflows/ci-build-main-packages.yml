@@ -1,3 +1,5 @@
+name: CI build docker container
+
 on:
   push:
     branches: [ main ]
@@ -16,6 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build project with Maven (native image)
+        run: ./mvnw package -Dnative
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -29,10 +40,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push (dev)
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           push: true
-          file: Dockerfile
-          tags: ${{ env.REGISTRY }}/taixmiguel/global-logger:latest
+          file: src/main/docker/Dockerfile.native
+          tags: ${{ env.REGISTRY }}/${{ lower(github.repository) }}:latest
           platforms: linux/amd64,linux/arm64
