@@ -45,5 +45,5 @@ jobs:
         with:
           push: true
           file: src/main/docker/Dockerfile.native
-          tags: ${{ env.REGISTRY }}/${{ lower(github.repository) }}:latest
+          tags: ${{ env.REGISTRY }}/taixmiguel/global-logger:latest
           platforms: linux/amd64,linux/arm64
