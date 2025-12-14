@@ -27,14 +27,14 @@ jobs:
       - name: Build project with Maven (native image)
         run: ./mvnw package -Dnative
 
-      - name: Create target directory
-        run: mkdir -p target
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: List target directory
+        run: ls -l target
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
