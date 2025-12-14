@@ -14,22 +14,45 @@ public class LogEntry extends PanacheMongoEntity {
 
     public LogEntry() {}
 
-    public LogEntry(String application, LogLevel level, String message) {
-        this(application, level, message, Instant.now());
+    private LogEntry(Builder builder) {
+        application = builder.application;
+        stackTrace = builder.stackTrace;
+        timestamp = builder.timestamp;
+        message = builder.message;
+        client = builder.client;
+        level = builder.level;
     }
 
-    public LogEntry(String application, LogLevel level, String message, Instant timestamp) {
-        this.application = application;
-        this.timestamp = timestamp;
-        this.message = message;
-        this.level = level;
+    public static Builder builder(String application, LogLevel level, String message) {
+        return new Builder(application, level, message);
     }
 
-    public void stackTrace(String stackTrace) {
-        this.stackTrace = stackTrace;
-    }
+    public static class Builder {
+        private final String application;
+        private final LogLevel level;
+        private final String message;
+        private Instant timestamp;
+        private String stackTrace;
+        private Client client;
 
-    public void client(Client client) {
-        this.client = client;
+        private Builder(String application, LogLevel level, String message) {
+            this.application = application;
+            timestamp = Instant.now();
+            this.message = message;
+            this.level = level;
+        }
+        public Builder timestamp(Instant timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+        public Builder stackTrace(String stackTrace) {
+            this.stackTrace = stackTrace;
+            return this;
+        }
+        public Builder client(Client client) {
+            this.client = client;
+            return this;
+        }
+        public LogEntry build() { return new LogEntry(this); }
     }
 }

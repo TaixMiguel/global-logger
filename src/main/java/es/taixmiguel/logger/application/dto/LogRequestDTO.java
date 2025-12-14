@@ -16,9 +16,10 @@ public record LogRequestDTO(
     @Valid ClientRequestDTO client
 ) {
     public LogEntry toLogEntry(String application) {
-        var entry = new LogEntry(application, level, message, timestamp);
-        entry.client(client.toClient());
-        entry.stackTrace(stackTrace);
-        return entry;
+        var builder = LogEntry.builder(application, level, message);
+        if (client != null) builder.client(client.toClient());
+        builder.stackTrace(stackTrace);
+        builder.timestamp(timestamp);
+        return builder.build();
     }
 }
