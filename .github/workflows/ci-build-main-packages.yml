@@ -27,6 +27,9 @@ jobs:
       - name: Build project with Maven (native image)
         run: ./mvnw package -Dnative
 
+      - name: Create target directory
+        run: mkdir -p target
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
