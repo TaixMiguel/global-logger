@@ -5,21 +5,31 @@ import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import java.time.Instant;
 
 public class LogEntry extends PanacheMongoEntity {
+    public String application;
     public Instant timestamp;
     public LogLevel level;
     public String message;
-    public String application;
+    public String stackTrace;
+    public Client client;
 
     public LogEntry() {}
 
-    public LogEntry(LogLevel level, String message, String application) {
-        this(Instant.now(), level, message, application);
+    public LogEntry(String application, LogLevel level, String message) {
+        this(application, level, message, Instant.now());
     }
 
-    public LogEntry(Instant timestamp, LogLevel level, String message, String application) {
-        this.timestamp = timestamp;
-        this.level = level;
-        this.message = message;
+    public LogEntry(String application, LogLevel level, String message, Instant timestamp) {
         this.application = application;
+        this.timestamp = timestamp;
+        this.message = message;
+        this.level = level;
+    }
+
+    public void stackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+
+    public void client(Client client) {
+        this.client = client;
     }
 }

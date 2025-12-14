@@ -22,7 +22,7 @@ public class LogServiceTest {
 
     @Test
     public void shouldSaveLogWhenEntryIsValid() {
-        var entry = new LogEntry(Instant.now(), LogLevel.debug, "test invocation", "test-application");
+        var entry = new LogEntry("test-application", LogLevel.debug, "test invocation", Instant.now());
         service.recordLog(entry);
         Mockito.verify(repository).save(entry);
     }
