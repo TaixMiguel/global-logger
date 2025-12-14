@@ -10,8 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
-
 @ExtendWith(MockitoExtension.class)
 public class LogServiceTest {
     @Mock
@@ -22,7 +20,7 @@ public class LogServiceTest {
 
     @Test
     public void shouldSaveLogWhenEntryIsValid() {
-        var entry = new LogEntry(Instant.now(), LogLevel.debug, "test invocation", "test-application");
+        var entry = LogEntry.builder("test-application", LogLevel.debug, "test invocation").build();
         service.recordLog(entry);
         Mockito.verify(repository).save(entry);
     }

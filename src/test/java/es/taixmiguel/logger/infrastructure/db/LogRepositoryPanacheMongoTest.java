@@ -24,11 +24,11 @@ public class LogRepositoryPanacheMongoTest {
 
     @Test
     public void testSaveLog_ShouldPersistOneEntry() {
-        LogEntry newLog = new LogEntry(
+        LogEntry newLog = LogEntry.builder(
+                "auth-service",
                 LogLevel.info,
-                "Service started successfully.",
-                "auth-service"
-        );
+                "Service started successfully."
+        ).build();
 
         repository.save(newLog);
 
@@ -38,22 +38,22 @@ public class LogRepositoryPanacheMongoTest {
 
     @Test
     public void testFindLogs_ShouldFilterOnlyByMandatoryApplication() {
-        repository.save(new LogEntry(
+        repository.save(LogEntry.builder(
+                "auth-service",
                 LogLevel.info,
-                "Service auth started successfully.",
-                "auth-service"
-        ));
+                "Service auth started successfully."
+        ).build());
 
-        repository.save(new LogEntry(
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing started successfully.",
-                "billing-service"
-        ));
-        repository.save(new LogEntry(
+                "Service billing started successfully."
+        ).build());
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing stopped successfully.",
-                "billing-service"
-        ));
+                "Service billing stopped successfully."
+        ).build());
 
         verifyFilterCount("auth-service", 1);
         verifyFilterCount("billing-service", 2);
@@ -62,16 +62,16 @@ public class LogRepositoryPanacheMongoTest {
 
     @Test
     public void testFindLogs_FilterByApplicationAndLevel() {
-        repository.save(new LogEntry(
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.debug,
-                "Service billing started successfully.",
-                "billing-service"
-        ));
-        repository.save(new LogEntry(
+                "Service billing started successfully."
+        ).build());
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing stopped successfully.",
-                "billing-service"
-        ));
+                "Service billing stopped successfully."
+        ).build());
 
         verifyFilterCount("billing-service", 1, LogLevel.debug);
         verifyFilterCount("billing-service", 1, LogLevel.info);
@@ -80,18 +80,18 @@ public class LogRepositoryPanacheMongoTest {
 
     @Test
     public void testFindLogs_FilterByDateRange() {
-        repository.save(new LogEntry(
-                Instant.parse("2025-01-01T00:00:00.00Z"),
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing started successfully.",
-                "billing-service"
-        ));
-        repository.save(new LogEntry(
-                Instant.parse("2025-01-01T00:05:00.00Z"),
+                "Service billing started successfully."
+        ).timestamp(Instant.parse("2025-01-01T00:00:00.00Z"))
+        .build());
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing stopped successfully.",
-                "billing-service"
-        ));
+                "Service billing stopped successfully."
+        ).timestamp(Instant.parse("2025-01-01T00:05:00.00Z"))
+        .build());
 
         verifyFilterCount("billing-service", 2, Instant.parse("2025-01-01T00:00:00.00Z"), Instant.parse("2025-01-01T01:00:00.00Z"));
         verifyFilterCount("billing-service", 1, Instant.parse("2025-01-01T00:00:00.00Z"), Instant.parse("2025-01-01T00:05:00.00Z"));
@@ -101,31 +101,31 @@ public class LogRepositoryPanacheMongoTest {
 
     @Test
     public void testFindLogs_ShouldOrderCorrectly() {
-        repository.save(new LogEntry(
-                Instant.parse("2025-01-01T00:01:00.00Z"),
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing started successfully.",
-                "billing-service"
-        ));
-        repository.save(new LogEntry(
-                Instant.parse("2025-01-01T00:05:00.00Z"),
+                "Service billing started successfully."
+        ).timestamp(Instant.parse("2025-01-01T00:01:00.00Z"))
+        .build());
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing stopped successfully.",
-                "billing-service"
-        ));
+                "Service billing stopped successfully."
+        ).timestamp(Instant.parse("2025-01-01T00:05:00.00Z"))
+        .build());
 
-        repository.save(new LogEntry(
-                Instant.parse("2025-01-01T00:02:30.00Z"),
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing started successfully.",
-                "billing-service"
-        ));
-        repository.save(new LogEntry(
-                Instant.parse("2025-01-01T00:00:30.00Z"),
+                "Service billing started successfully."
+        ).timestamp(Instant.parse("2025-01-01T00:02:30.00Z"))
+        .build());
+        repository.save(LogEntry.builder(
+                "billing-service",
                 LogLevel.info,
-                "Service billing stopped successfully.",
-                "billing-service"
-        ));
+                "Service billing stopped successfully."
+        ).timestamp(Instant.parse("2025-01-01T00:00:30.00Z"))
+        .build());
 
         var criteria = new LogSearchCriteria("billing-service");
         var logs = repository.find(criteria);
