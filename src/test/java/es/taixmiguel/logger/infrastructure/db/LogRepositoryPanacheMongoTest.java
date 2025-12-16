@@ -1,5 +1,6 @@
 package es.taixmiguel.logger.infrastructure.db;
 
+import es.taixmiguel.logger.application.port.qualifier.MongoRepository;
 import es.taixmiguel.logger.application.query.LogSearchCriteria;
 import es.taixmiguel.logger.application.query.LogSearchSortCriteria;
 import es.taixmiguel.logger.domain.LogEntry;
@@ -15,6 +16,7 @@ import java.time.Instant;
 @QuarkusTest
 public class LogRepositoryPanacheMongoTest {
     @Inject
+    @MongoRepository
     LogRepositoryPanacheMongo repository;
 
     @BeforeEach
