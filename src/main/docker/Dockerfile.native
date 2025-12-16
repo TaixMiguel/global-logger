@@ -18,8 +18,17 @@
 ###
 FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
 WORKDIR /app/
-COPY . /app
 
+# Copy only files needed to download dependencies
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+# Create a cacheable layer for dependencies
+RUN ./mvnw dependency:go-offline
+
+# Copy the rest of the application source code
+COPY src/ src/
+
+# Build the native executable
 RUN ./mvnw package -Dnative -DskipTests
 
 
