@@ -33,10 +33,10 @@ public class LogEntryJpa {
         return entry;
     }
     public LogEntry toDomain() {
-        return LogEntry.builder(application, level, message)
+        var builder = LogEntry.builder(application, level, message)
                 .timestamp(timestamp)
-                .stackTrace(stackTrace)
-                .client(client.toDomain())
-                .build();
+                .stackTrace(stackTrace);
+        if (client != null) builder.client(client.toDomain());
+        return builder.build();
     }
 }

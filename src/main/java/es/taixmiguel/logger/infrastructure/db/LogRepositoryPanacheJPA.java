@@ -11,8 +11,9 @@ import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @JpaRepository
 @ApplicationScoped
@@ -28,24 +29,24 @@ public class LogRepositoryPanacheJPA implements LogRepository, PanacheRepository
     @Override
     public List<LogEntry> find(LogSearchCriteria criteria) {
         StringBuilder query = new StringBuilder();
-        List<Object> params = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
 
-        query.append("application = ?1");
-        params.add(criteria.application());
+        query.append("application = :application");
+        params.put("application", criteria.application());
 
         criteria.level().ifPresent(logLevel -> {
-            query.append(" and level = ?").append(params.size() + 1);
-            params.add(logLevel);
+            query.append(" and level = :level");
+            params.put("level", logLevel);
         });
 
         criteria.dateFrom().ifPresent(dateFrom -> {
-            query.append(" and timestamp >= ?").append(params.size() + 1);
-            params.add(dateFrom);
+            query.append(" and timestamp >= :dateFrom");
+            params.put("dateFrom", dateFrom);
         });
 
         criteria.dateTo().ifPresent(dateTo -> {
-            query.append(" and timestamp < ?").append(params.size() + 1);
-            params.add(dateTo);
+            query.append(" and timestamp < :dateTo");
+            params.put("dateTo", dateTo);
         });
 
         Sort sort = criteria.sortOrder()
@@ -57,7 +58,7 @@ public class LogRepositoryPanacheJPA implements LogRepository, PanacheRepository
                 )
                 .orElse(Sort.descending("timestamp"));
 
-        return find(query.toString(), sort, params.toArray())
+        return find(query.toString(), sort, params)
                 .stream()
                 .map(LogEntryJpa::toDomain)
                 .toList();
