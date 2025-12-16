@@ -1,6 +1,7 @@
 package es.taixmiguel.logger.infrastructure.db;
 
 import es.taixmiguel.logger.application.port.LogRepository;
+import es.taixmiguel.logger.application.port.qualifier.MongoRepository;
 import es.taixmiguel.logger.application.query.LogSearchCriteria;
 import es.taixmiguel.logger.application.query.LogSearchSortCriteria;
 import es.taixmiguel.logger.domain.LogEntry;
@@ -11,6 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 
+@MongoRepository
 @ApplicationScoped
 public class LogRepositoryPanacheMongo implements LogRepository, PanacheMongoRepository<LogEntry> {
 
